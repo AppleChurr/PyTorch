@@ -1,0 +1,8 @@
+*.onnx
+*/dist/*
+*/build/*
+*.exe
+*.spec
+
+
+.tmp.driveupload/*

@@ -14,6 +14,8 @@ from PIL import Image
 from tqdm import tqdm  # 추가
 import os
 
+import mManager as mManager
+
 from torchvision.models import resnet18, ResNet18_Weights
 
 
@@ -104,31 +106,6 @@ def evaluate_model(model, dataloader, criterion, device):
     average_loss = total_loss / len(dataloader)
     return average_loss, accuracy
 
-def create_model(model_func, default_weights, num_classes=5):
-    print("\tCreate Model")
-    model = model_func(weights=default_weights)
-    num_ftrs = model.fc.in_features
-    model.fc = nn.Linear(num_ftrs, num_classes)  # 클래스 수에 맞게 마지막 레이어 변경
-    return model
-
-def save_model(model, path):
-    torch.save(model.state_dict(), path)
-
-def load_model(model, path):
-    model.load_state_dict(torch.load(path))
-    return model
-
-# ONNX 모델 불러오는 함수 정의 (수정된 버전)
-def load_pretrained_model(model_path):
-    print("Model Init")
-    model = create_model(resnet18, ResNet18_Weights.DEFAULT)
-
-    if os.path.exists(model_path):
-        print("\tLoad Pretrained Weights")
-        model = load_model(model, model_path)
-
-    return model
-
 # 데이터 전처리 및 Augmentation
 transform = transforms.Compose([
     transforms.Resize((224, 224)),
@@ -149,11 +126,15 @@ train_loader, val_loader, test_loader = data_loader_wrapper.get_loaders()
 
 # ONNX 모델 경로 및 기본 모델 설정
 onnx_model_path = "./best_model_step0.onnx"
-model = load_pretrained_model(onnx_model_path)
+
+# model = load_pretrained_model(onnx_model_path)
+_modelManager = mManager.Model_Step0(onnx_model_path)
+_modelManager.Init_model()
+
+model = _modelManager.get_model()
 
 # 모델을 훈련 모드로 설정
 model.train()
-
 
 if torch.cuda.is_available:
     print("Cuda is available")

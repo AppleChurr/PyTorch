@@ -193,5 +193,5 @@ for epoch in range(num_epochs):
     # 최적의 모델 저장
     if test_loss < best_loss:
         best_loss = test_loss
-        save_model(model, onnx_model_path)
+        _modelManager.save_model(model)
         print(f"ONNX Model saved to {onnx_model_path}")

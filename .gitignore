@@ -6,5 +6,6 @@
 
 
 .tmp.driveupload/*
+.tmp.drivedownload/*
 
 */__pycache__/*

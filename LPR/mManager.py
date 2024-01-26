@@ -4,6 +4,7 @@ import torch.optim as optim
 from torchvision import models
 from torch.utils.data import DataLoader
 from torchvision.models import resnet18, ResNet18_Weights
+from torchvision.models.detection import fasterrcnn_resnet50_fpn
 import os
 
 class ModelManager:
@@ -15,8 +16,9 @@ class ModelManager:
         # 모델 생성 로직
         pass
 
-    def save_model(self):
-        torch.save(self.model.state_dict(), self.model_path)
+    def save_model(self, model):
+        self.model = model
+        torch.save(model.state_dict(), self.model_path)
 
     def load_model(self):
         self.model.load_state_dict(torch.load(self.model_path))

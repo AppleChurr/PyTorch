@@ -9,3 +9,5 @@
 .tmp.drivedownload/*
 
 */__pycache__/*
+
+*.pt
